@@ -1,0 +1,33 @@
+---
+// @ts-ignore
+import { Link, GitHub } from 'astro-feather-icons'
+
+export interface Props {
+	title: string;
+	pubDate: string;
+	heroImage: string;
+	alt: string;
+	github?: string;
+	url?: string;
+}
+
+const { title, pubDate, heroImage, alt, url, github } = Astro.props;
+const iconClasses = "text-zinc-400 first:ml-2 relative bottom-[2px]";
+const iconSize = 20;
+---
+
+<article class="mt-4">
+	<header>
+		{heroImage && <img width="720" height="420" class="hero-image" loading="lazy" src={heroImage} alt={alt} />}
+		<div>
+		<span class="text-zinc-400 mr-4">{pubDate}</span>
+		</div>
+		<h1 class="text-3xl">{title}
+		{github && <a target="_blank" href={github} class={iconClasses}><GitHub size={iconSize} /></a>}
+		{url && <a target="_blank" href={url} class={iconClasses}><Link size={iconSize} /></a>}
+		</h1>
+	</header>
+	<main>
+		<slot />
+	</main>
+</article>

@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-size: 16px;
+}
+
+.astro-code {
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 16px;
+}
+
+p > code {
+  background-color: #1E293B;
+  border-radius: 5px;
+  padding: 0 6px;
+}
+
+article a {
+  text-decoration: underline;
+  text-decoration-color: #79C0FF;
+}
+
+article a:hover {
+  color: #79C0FF;
+}
+
+body svg {
+  display: inline;
+}

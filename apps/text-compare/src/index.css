@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.inverse-colors {
+  background-color: black;
+  color: white;
+}
+
+:root {
+  --removed-bg-color: #ff5964;
+  --added-bg-color: #6bf178;
+  --gap: 10px;
+  --border-radius: 5px;
+  --border: 1px solid white;
+}
+
+.page {
+  margin: var(--gap);
+}
+
+.textarea-wrapper {
+  min-height: 150px;
+  margin-top: var(--gap);
+  display: grid;
+  gap: var(--gap);
+}
+
+textarea {
+  border-radius: var(--border-radius);
+  padding: var(--gap);
+  resize: vertical;
+  border: var(--border);
+}
+
+.textarea-left {
+  grid-column-start: 1;
+}
+
+.textarea-right {
+  grid-column-start: 2;
+}
+
+.diff {
+  color: black;
+}
+
+.diff.added {
+  background-color: var(--added-bg-color);
+}
+
+.diff.removed {
+  background-color: var(--removed-bg-color);
+}
+
+.diff-wrapper {
+  margin-top: var(--gap);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: var(--gap);
+}

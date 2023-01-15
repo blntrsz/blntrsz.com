@@ -1,0 +1,30 @@
+---
+label: Post
+hide_body: false
+fields:
+- type: text
+  name: setup
+  label: setup
+  default: import Layout from '../../layouts/BlogPost.astro'
+  config:
+    required: true
+- type: text
+  name: title
+  label: title
+- type: list
+  name: tags
+  label: tags
+- type: datetime
+  name: pubDate
+  label: pubDate
+  config:
+    required: true
+    date_format: ''
+    export_format: DD MMM YYYY
+    display_utc: false
+- type: text
+  name: description
+  label: description
+- type: text
+  name: github
+  label: github

@@ -1,0 +1,18 @@
+---
+import BlogPost from '../components/BlogPost.astro';
+import BaseLayout from './BaseLayout.astro';
+
+const {
+	content: {
+		title,
+		description,
+		permalink,
+	}
+} = Astro.props;
+---
+
+<BaseLayout hasPrism={true} {title} {description} {permalink}>
+	<BlogPost {...Astro.props.content}>
+		<slot />
+	</BlogPost>
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+// @ts-ignore
+import { Rss, GitHub, Linkedin } from 'astro-feather-icons'
+import { GITHUB_URL, LINKEDIN_URL, RSS_PATH } from '../constants/site';
+import HeaderIcon from './HeaderIcon.astro';
+
+const iconSize = 20;
+---
+
+<header class="max-w-5xl">
+	<div class="flex py-4 items-center justify-between">
+		<a href="/">
+			<span class="text-2xl font-bold">blntrsz</span>
+		</a>
+		<div class="flex justify-between w-24">
+			<HeaderIcon href={RSS_PATH}>
+				<Rss size={iconSize} />
+			</HeaderIcon>
+			<HeaderIcon href={LINKEDIN_URL}>
+				<Linkedin size={iconSize} />
+			</HeaderIcon>
+			<HeaderIcon href={GITHUB_URL}>
+				<GitHub size={iconSize} />
+			</HeaderIcon>
+		</div>
+	</div>
+</header>

@@ -1,0 +1,28 @@
+---
+import BlogPostPreview from '../../components/BlogPostPreview.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortByDate } from '../../utils/sort-by-date';
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = (await Astro.glob('../posts/*.md')).sort(sortByDate);
+
+  return paginate((allPosts), { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout>
+  <section aria-label="Blog post list">
+    {page.data.map((p) =>
+    <BlogPostPreview post={p} />)}
+  </section>
+  <div class="flex justify-center">
+    <div class="w-1/2 flex justify-end p-8">
+      {page.url.prev && <a href={page.url.prev}>Previous Page</a>}
+    </div>
+    <div class="w-1/2 flex justify-start p-8">
+      {page.url.next && <a href={page.url.next}>Next Page</a>}
+    </div>
+  </div>
+</BaseLayout>
