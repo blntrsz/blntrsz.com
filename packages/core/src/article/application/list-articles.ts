@@ -1,15 +1,22 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { ListArticles } from "@blntrsz/core/article/use-cases/list-articles";
-import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
-import { PinoLogger } from "@blntrsz/lib/pino-logger";
+import { listArticles } from "@blntrsz/core/article/use-cases/list-articles";
+import { withApp } from "@blntrsz/core/app-context";
 
 export async function listArticlesLoader({}: LoaderFunctionArgs) {
-  const articles = await new ListArticles(
-    PinoLogger.instance,
-    new TursoArticleRepository()
-  ).execute();
+  return withApp(async () => {
+    const [articles, error] = await listArticles();
 
-  return json({
-    articles,
+    if (error) {
+      return json(
+        {
+          message: "something happened",
+        },
+        400
+      );
+    }
+
+    return json({
+      articles: articles.map((article) => article.toResponse()),
+    });
   });
 }

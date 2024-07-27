@@ -47,6 +47,7 @@ export abstract class Entity<EntityProps> {
       updatedAt: this.updatedAt,
       ...this.props,
     };
+
     return Object.freeze(propsCopy);
   }
 }

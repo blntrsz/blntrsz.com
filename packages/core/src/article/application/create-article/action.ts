@@ -1,33 +1,26 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { CreateArticle } from "@blntrsz/core/article/use-cases/create-article";
+import { createArticle } from "@blntrsz/core/article/use-cases/create-article";
 import { parseWithZod } from "@conform-to/zod";
-import { PinoLogger } from "@blntrsz/lib/pino-logger";
-import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
 import { createArticleActionSchema } from "./schema";
-import { withRequestContext } from "@blntrsz/lib/request.context";
-import { randomUUID } from "crypto";
+import { withApp } from "@blntrsz/core/app-context";
 
 export async function createArticleAction({ request }: ActionFunctionArgs) {
-  return withRequestContext(
-    {
-      requestId: randomUUID(),
-    },
-    async () => {
-      const formData = await request.formData();
-      const submission = parseWithZod(formData, {
-        schema: createArticleActionSchema,
-      });
+  return withApp(async () => {
+    const formData = await request.formData();
+    const submission = parseWithZod(formData, {
+      schema: createArticleActionSchema,
+    });
 
-      if (submission.status !== "success") {
-        return submission.reply();
-      }
-
-      new CreateArticle(
-        PinoLogger.instance,
-        new TursoArticleRepository()
-      ).execute(submission.value);
-
-      return redirect("/admin");
+    if (submission.status !== "success") {
+      return submission.reply();
     }
-  );
+
+    const [_, error] = await createArticle(submission.value);
+
+    if (error) {
+      return redirect('/admin?error="failed-to-create-article"');
+    }
+
+    return redirect("/admin");
+  });
 }

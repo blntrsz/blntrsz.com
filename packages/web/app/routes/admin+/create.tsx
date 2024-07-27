@@ -3,8 +3,10 @@ import { useForm } from "@conform-to/react";
 import { createArticleAction } from "@blntrsz/core/article/application/create-article/action";
 import { Form, useActionData } from "@remix-run/react";
 import { createArticleActionSchema } from "@blntrsz/core/article/application/create-article/schema";
-import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { Field, FieldError } from "~/components/field";
+import { InputConform } from "~/components/input-conform";
+import { Label } from "~/components/ui/label";
 
 export const action = createArticleAction;
 
@@ -32,18 +34,26 @@ export default function CreateArticlePage() {
       onSubmit={form.onSubmit}
       noValidate
     >
-      <Input
-        key={fields.title.key}
-        name={fields.title.name}
-        defaultValue={fields.title.initialValue}
-        placeholder="Add title here..."
-      />
-      <Input
-        key={fields.description.key}
-        name={fields.description.name}
-        defaultValue={fields.description.initialValue}
-        placeholder="Add description here..."
-      />
+      <Field>
+        <Label htmlFor={fields.title.id}>Name</Label>
+        <InputConform
+          placeholder="Add title here..."
+          meta={fields.title}
+          type="text"
+        />
+        {fields.title.errors && <FieldError>{fields.title.errors}</FieldError>}
+      </Field>
+      <Field>
+        <Label htmlFor={fields.description.id}>Name</Label>
+        <InputConform
+          placeholder="Add description here..."
+          meta={fields.description}
+          type="text"
+        />
+        {fields.description.errors && (
+          <FieldError>{fields.description.errors}</FieldError>
+        )}
+      </Field>
       <Button type="submit">Create</Button>
     </Form>
   );

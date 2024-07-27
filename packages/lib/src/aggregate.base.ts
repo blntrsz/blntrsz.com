@@ -5,6 +5,7 @@ import { Logger } from "./logger.base";
 import { useRequestContext } from "./request.context";
 
 export abstract class Aggregate<EntityProps> extends Entity<EntityProps> {
+  abstract readonly type: string;
   private domainEvents: DomainEvent[] = [];
 
   protected addEvent(domainEvent: DomainEvent): void {
