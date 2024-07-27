@@ -23,8 +23,6 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@blntrsz/core/*": ["../core/src/*"],
-      "@blntrsz/lib/*": ["../lib/src/*"],
       "~/*": ["./app/*"]
     },
 

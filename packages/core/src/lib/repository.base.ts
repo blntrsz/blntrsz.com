@@ -45,4 +45,25 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
       })
     );
   }
+
+  async findOne(aggregateId: string): Promise<TAggregate | null> {
+    const result = await useDatabaseClient((db) => {
+      return db.execute({
+        sql: `SELECT * FROM ${this.tableName} where id = ?;`,
+        args: [aggregateId],
+      });
+    });
+    const first = result.rows[0];
+
+    if (!first) return null;
+
+    const { id, updatedAt, createdAt, ...props } = first;
+
+    return this.toDomain({
+      id,
+      updatedAt,
+      createdAt,
+      props,
+    });
+  }
 }

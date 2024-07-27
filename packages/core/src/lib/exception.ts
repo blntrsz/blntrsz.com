@@ -1,14 +1,14 @@
-import { useRequestContext } from "./request.context";
+import { randomUUID } from "crypto";
 
 export abstract class Exception extends Error {
   abstract readonly code: string;
-  abstract readonly message: string;
+  abstract override readonly message: string;
 
   toResponse() {
     return {
       errors: [
         {
-          id: useRequestContext().requestId,
+          id: randomUUID(),
           code: this.code,
           title: this.message,
         },

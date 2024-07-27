@@ -8,8 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@tsconfig/recommended": "^1.0.7"
-  }
+  "license": "ISC"
 }

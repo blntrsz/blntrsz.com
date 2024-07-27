@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { Aggregate } from "@blntrsz/lib/aggregate.base";
-import { ArticleProps } from "./article.types";
+import type { ArticleProps } from "./article.types";
 import {
   ArticleCreatedDomainEvent,
   ArticleDescriptionUpdatedDomainEvent,
@@ -8,7 +8,7 @@ import {
 } from "./article.domain-events";
 
 export class Article extends Aggregate<ArticleProps> {
-  static type = "articles";
+  static readonly type = "articles";
 
   static create(props: ArticleProps) {
     const id = randomUUID();

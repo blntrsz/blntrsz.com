@@ -1,8 +1,7 @@
 import { DomainEvent } from "./domain-event.base";
 import { Entity } from "./entity.base";
-import { EventEmitter } from "../common/ports/event-emitter";
-import { Logger } from "../common/ports/logger";
-import { useRequestContext } from "./request.context";
+import type { EventEmitter } from "../common/ports/event-emitter";
+import type { Logger } from "../common/ports/logger";
 
 export abstract class Aggregate<EntityProps> extends Entity<EntityProps> {
   private domainEvents: DomainEvent[] = [];
@@ -19,11 +18,10 @@ export abstract class Aggregate<EntityProps> extends Entity<EntityProps> {
     logger: Logger,
     eventEmitter: EventEmitter
   ): Promise<void> {
-    const requestContext = useRequestContext();
     await Promise.all(
       this.domainEvents.map(async (event) => {
         logger.debug(
-          `[${requestContext.requestId}] "${event.constructor.name}" event published for aggregate ${this.constructor.name} : ${this.id}`
+          `"${event.constructor.name}" event published for aggregate ${this.constructor.name} : ${this.id}`
         );
         return eventEmitter.emit(event.constructor.name, event);
       })

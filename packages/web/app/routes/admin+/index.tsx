@@ -1,20 +1,15 @@
-import { json, useLoaderData } from "@remix-run/react";
-import { z } from "zod";
-import { ListArticles } from "@blntrsz/core/article/use-cases/list-articles";
-import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
-import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
-import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
-
-export const createArticleActionSchema = z.object({
-  title: z.string().min(5),
-  description: z.string().min(20),
-});
+import { json, Link, useLoaderData } from "@remix-run/react";
+import { ListArticles } from "@blntrsz/core/src/article/use-cases/list-articles";
+import { articleMapper } from "@blntrsz/core/src/article/domain/article.mapper";
+import { PinoLogger } from "@blntrsz/core/src/common/adapters/pino.logger";
+import { TursoArticleRepository } from "@blntrsz/core/src/article/infrastructure/turso.article.repository";
 
 export async function loader() {
-  const articles = await new ListArticles(
+  const useCase = new ListArticles(
     PinoLogger.instance,
     new TursoArticleRepository()
-  ).execute();
+  );
+  const articles = await useCase.execute();
 
   return json({
     articles: articles.map((article) => articleMapper.toResponse(article)),
@@ -31,7 +26,9 @@ export default function Admin() {
   return (
     <ul>
       {loaderData.articles.map((article) => (
-        <li key={article.id}>{article.attributes.title}</li>
+        <li key={article.id}>
+          <Link to={`/admin/${article.id}`}>{article.attributes.title}</Link>
+        </li>
       ))}
     </ul>
   );
