@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "sst": "sst",
     "migrate": "sst shell tsx migrate.ts"
@@ -15,7 +16,7 @@
     "tsx": "^4.16.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.141",
+    "@types/aws-lambda": "8.10.142",
     "@types/node": "^20.14.12"
   }
 }

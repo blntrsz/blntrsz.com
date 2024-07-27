@@ -1,7 +1,7 @@
 import {
   DomainEvent,
   type DomainEventProps,
-} from "@blntrsz/lib/domain-event.base";
+} from "@blntrsz/core/lib/domain-event.base";
 import type { ArticleProps } from "./article.types";
 
 export class ArticleCreatedDomainEvent extends DomainEvent {

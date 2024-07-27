@@ -1,6 +1,6 @@
 import type { Logger } from "@blntrsz/core/common/ports/logger";
-import type { ArticleRepository } from "../domain/repository/article.repository";
-import { Article } from "../domain/article";
+import type { ArticleRepository } from "@blntrsz/core/article/domain/repository/article.repository";
+import { Article } from "@blntrsz/core/article/domain/article";
 
 export class ListArticles {
   constructor(

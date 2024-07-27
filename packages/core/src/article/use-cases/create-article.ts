@@ -1,7 +1,7 @@
 import { Article } from "@blntrsz/core/article/domain/article";
 import type { ArticleProps } from "@blntrsz/core/article/domain/article.types";
 import type { Logger } from "@blntrsz/core/common/ports/logger";
-import type { ArticleRepository } from "../domain/repository/article.repository";
+import type { ArticleRepository } from "@blntrsz/core/article/domain/repository/article.repository";
 import type { EventEmitter } from "@blntrsz/core/common/ports/event-emitter";
 
 type Request = Pick<ArticleProps, "title" | "description">;

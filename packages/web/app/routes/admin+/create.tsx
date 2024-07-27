@@ -7,10 +7,10 @@ import { InputConform } from "~/components/input-conform";
 import { Label } from "~/components/ui/label";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { CreateArticle } from "@blntrsz/core/src/article/use-cases/create-article";
-import { TursoArticleRepository } from "@blntrsz/core/src/article/infrastructure/turso.article.repository";
-import { PinoLogger } from "@blntrsz/core/src/common/adapters/pino.logger";
-import { EventBridge } from "@blntrsz/core/src/common/adapters/event-bridge.event-emitter";
+import { CreateArticle } from "@blntrsz/core/article/use-cases/create-article";
+import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-emitter";
 
 export const schema = z.object({
   title: z.string().min(5),

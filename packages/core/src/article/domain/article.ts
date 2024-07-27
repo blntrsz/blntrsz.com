@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { Aggregate } from "@blntrsz/lib/aggregate.base";
+import { Aggregate } from "@blntrsz/core/lib/aggregate.base";
 import type { ArticleProps } from "./article.types";
 import {
   ArticleCreatedDomainEvent,

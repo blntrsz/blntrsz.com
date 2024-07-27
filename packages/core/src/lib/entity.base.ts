@@ -36,14 +36,14 @@ export abstract class Entity<EntityProps> {
     return this._id;
   }
 
-  public getProps(): EntityProps & BaseEntityProps {
-    const propsCopy = {
+  public getProps() {
+    const props = {
       id: this._id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ...this.props,
-    };
+    } as const;
 
-    return Object.freeze(propsCopy);
+    return Object.freeze(props);
   }
 }

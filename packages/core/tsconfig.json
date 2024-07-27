@@ -24,8 +24,7 @@
 
     "baseUrl": ".",
     "paths": {
-      "@blntrsz/core/*": ["../core/src/*"],
-      "@blntrsz/lib/*": ["./src/lib/*"]
+      "@blntrsz/core/*": ["./src/*"]
     }
   }
 }

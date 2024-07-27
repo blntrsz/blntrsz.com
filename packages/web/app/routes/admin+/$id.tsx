@@ -1,8 +1,8 @@
 import { json, redirect, useLoaderData } from "@remix-run/react";
-import { FindOneArticle } from "@blntrsz/core/src/article/use-cases/find-one-article";
-import { articleMapper } from "@blntrsz/core/src/article/domain/article.mapper";
-import { PinoLogger } from "@blntrsz/core/src/common/adapters/pino.logger";
-import { TursoArticleRepository } from "@blntrsz/core/src/article/infrastructure/turso.article.repository";
+import { FindOneArticle } from "@blntrsz/core/article/use-cases/find-one-article";
+import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
 export async function loader({ params }: LoaderFunctionArgs) {

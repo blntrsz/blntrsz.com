@@ -1,4 +1,4 @@
-import type { CreateEntityProps } from "@blntrsz/lib/entity.base";
+import type { CreateEntityProps } from "@blntrsz/core/lib/entity.base";
 import { Article } from "./article";
 import type { ArticleProps } from "./article.types";
 
