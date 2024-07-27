@@ -1,4 +1,4 @@
-import { useApp } from "@blntrsz/core/app-context";
+import { useRequestContext } from "./request.context";
 
 export abstract class Exception extends Error {
   abstract readonly code: string;
@@ -8,7 +8,7 @@ export abstract class Exception extends Error {
     return {
       errors: [
         {
-          id: useApp().requestId,
+          id: useRequestContext().requestId,
           code: this.code,
           title: this.message,
         },

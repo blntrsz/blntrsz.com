@@ -1,8 +1,9 @@
-import { withApp } from "@blntrsz/core/app-context";
 import { json, useLoaderData } from "@remix-run/react";
 import { z } from "zod";
-import { listArticles } from "@blntrsz/core/article/use-cases/list-articles";
+import { ListArticles } from "@blntrsz/core/article/use-cases/list-articles";
 import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
 
 export const createArticleActionSchema = z.object({
   title: z.string().min(5),
@@ -10,12 +11,13 @@ export const createArticleActionSchema = z.object({
 });
 
 export async function loader() {
-  return withApp(async () => {
-    const articles = await listArticles();
+  const articles = await new ListArticles(
+    PinoLogger.instance,
+    new TursoArticleRepository()
+  ).execute();
 
-    return json({
-      articles: articles.map((article) => articleMapper.toResponse(article)),
-    });
+  return json({
+    articles: articles.map((article) => articleMapper.toResponse(article)),
   });
 }
 

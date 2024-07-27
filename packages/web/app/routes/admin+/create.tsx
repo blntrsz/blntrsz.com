@@ -7,7 +7,10 @@ import { InputConform } from "~/components/input-conform";
 import { Label } from "~/components/ui/label";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { withApp } from "@blntrsz/core/app-context";
+import { CreateArticle } from "@blntrsz/core/article/use-cases/create-article";
+import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { EventEmitter } from "node:events";
 
 export const schema = z.object({
   title: z.string().min(5),
@@ -15,18 +18,22 @@ export const schema = z.object({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
-  return withApp(async () => {
-    const formData = await request.formData();
-    const submission = parseWithZod(formData, {
-      schema,
-    });
-
-    if (submission.status !== "success") {
-      return submission.reply();
-    }
-
-    return redirect("/admin");
+  const formData = await request.formData();
+  const submission = parseWithZod(formData, {
+    schema,
   });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  await new CreateArticle(
+    PinoLogger.instance,
+    new TursoArticleRepository(),
+    new EventEmitter()
+  ).execute(submission.value);
+
+  return redirect("/admin");
 }
 
 export default function CreateArticlePage() {

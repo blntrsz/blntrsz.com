@@ -8,5 +8,5 @@ export class TursoArticleRepository
   implements ArticleRepository
 {
   toDomain = articleMapper.toDomain;
-  tableName = "article";
+  tableName = Article.type;
 }

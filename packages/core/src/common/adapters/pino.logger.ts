@@ -1,7 +1,7 @@
 import pino from "pino";
 
-import { Logger } from "./logger.base";
-import { useRequestContext } from "./request.context";
+import { Logger } from "../ports/logger";
+import { useRequestContext } from "@blntrsz/lib/request.context";
 
 export class PinoLogger implements Logger {
   static _instance: PinoLogger;
