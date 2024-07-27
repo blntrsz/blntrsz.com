@@ -1,9 +1,18 @@
 import { CreateEntityProps } from "@blntrsz/lib/entity.base";
-import { Article } from "./article.entity";
+import { Article } from "./article";
 import { ArticleProps } from "./article.types";
-import { Mapper } from "@blntrsz/lib/mapper";
 
-export const articleMapper: Mapper<Article> = {
+export const articleMapper = {
+  toResponse(article: Article) {
+    const { id, ...props } = article.getProps();
+
+    return {
+      id: id,
+      type: Article.type,
+      attributes: props,
+    };
+  },
+
   toDomain(props: CreateEntityProps<ArticleProps>) {
     return new Article(props);
   },

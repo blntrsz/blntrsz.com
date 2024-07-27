@@ -8,11 +8,7 @@ import {
 } from "./article.domain-events";
 
 export class Article extends Aggregate<ArticleProps> {
-  type = "articles";
-
-  public validate(): void {}
-
-  public validateProps(): void {}
+  static type = "articles";
 
   static create(props: ArticleProps) {
     const id = randomUUID();
@@ -58,15 +54,5 @@ export class Article extends Aggregate<ArticleProps> {
         currentDescription,
       })
     );
-  }
-
-  toResponse() {
-    const { id, ...props } = this.getProps();
-
-    return {
-      id: id,
-      type: this.type,
-      attributes: props,
-    };
   }
 }

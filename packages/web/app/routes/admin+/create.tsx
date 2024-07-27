@@ -1,14 +1,33 @@
 import { parseWithZod } from "@conform-to/zod";
 import { useForm } from "@conform-to/react";
-import { createArticleAction } from "@blntrsz/core/article/application/create-article/action";
-import { Form, useActionData } from "@remix-run/react";
-import { createArticleActionSchema } from "@blntrsz/core/article/application/create-article/schema";
+import { Form, redirect, useActionData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Field, FieldError } from "~/components/field";
 import { InputConform } from "~/components/input-conform";
 import { Label } from "~/components/ui/label";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { z } from "zod";
+import { withApp } from "@blntrsz/core/app-context";
 
-export const action = createArticleAction;
+export const schema = z.object({
+  title: z.string().min(5),
+  description: z.string().min(20),
+});
+
+export async function action({ request }: ActionFunctionArgs) {
+  return withApp(async () => {
+    const formData = await request.formData();
+    const submission = parseWithZod(formData, {
+      schema,
+    });
+
+    if (submission.status !== "success") {
+      return submission.reply();
+    }
+
+    return redirect("/admin");
+  });
+}
 
 export default function CreateArticlePage() {
   const lastResult = useActionData<typeof action>();
@@ -18,7 +37,7 @@ export default function CreateArticlePage() {
 
     // Reuse the validation logic on the client
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: createArticleActionSchema });
+      return parseWithZod(formData, { schema });
     },
 
     // Validate the form on blur event triggered
