@@ -28,6 +28,7 @@ export abstract class DomainEvent {
   public readonly id: string;
   abstract name: string;
   abstract version: number;
+  abstract readonly props: object;
 
   get eventName() {
     return `${this.name}:${this.version}`;
@@ -37,6 +38,13 @@ export abstract class DomainEvent {
   public readonly aggregateId: string;
 
   public readonly metadata: DomainEventMetadata;
+
+  toEvent() {
+    return {
+      ...this.metadata,
+      ...this.props,
+    };
+  }
 
   constructor(props: DomainEventProps<unknown>) {
     this.id = randomUUID();

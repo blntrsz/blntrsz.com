@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
-import { Aggregate } from "@blntrsz/lib/aggregate.base";
-import { ActivityLogProps } from "./activity-log.types";
+import { Aggregate } from "@blntrsz/core/lib/aggregate.base";
+import type { ActivityLogProps } from "./activity-log.types";
 
 export class ActivityLog extends Aggregate<ActivityLogProps> {
   static readonly type = "activity_logs";

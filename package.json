@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "sst": "sst",
+    "dev": "sst dev",
     "migrate": "sst shell tsx migrate.ts"
   },
   "keywords": [],

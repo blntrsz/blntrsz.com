@@ -50,7 +50,14 @@ importers:
         specifier: ^20.14.12
         version: 20.14.12
 
-  packages/infra: {}
+  packages/infra:
+    dependencies:
+      '@libsql/client':
+        specifier: ^0.7.0
+        version: 0.7.0
+      '@libsql/darwin-arm64':
+        specifier: 0.4.0-pre.10
+        version: 0.4.0-pre.10
 
   packages/web:
     dependencies:
@@ -917,6 +924,11 @@ packages:
 
   '@libsql/darwin-arm64@0.3.19':
     resolution: {integrity: sha512-rmOqsLcDI65zzxlUOoEiPJLhqmbFsZF6p4UJQ2kMqB+Kc0Rt5/A1OAdOZ/Wo8fQfJWjR1IbkbpEINFioyKf+nQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@libsql/darwin-arm64@0.4.0-pre.10':
+    resolution: {integrity: sha512-UgfcbVsZdpPohhTaN+szvqOmPOb/7YYkKxEBpGnLAsAA6UeexBFaGyyLGNAVcAnP63l10e2R1Q0/JcJG78FMiA==}
     cpu: [arm64]
     os: [darwin]
 
@@ -5643,6 +5655,8 @@ snapshots:
 
   '@libsql/darwin-arm64@0.3.19':
     optional: true
+
+  '@libsql/darwin-arm64@0.4.0-pre.10': {}
 
   '@libsql/darwin-x64@0.3.19':
     optional: true

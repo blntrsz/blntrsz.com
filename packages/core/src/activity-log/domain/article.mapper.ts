@@ -1,6 +1,6 @@
-import { CreateEntityProps } from "@blntrsz/lib/entity.base";
+import type { CreateEntityProps } from "@blntrsz/core/lib/entity.base";
 import { ActivityLog } from "./activity-log";
-import { ActivityLogProps } from "./activity-log.types";
+import type { ActivityLogProps } from "./activity-log.types";
 
 export const activityLogMapper = {
   toResponse(activityLog: ActivityLog) {

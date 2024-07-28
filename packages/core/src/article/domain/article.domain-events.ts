@@ -8,13 +8,17 @@ export class ArticleCreatedDomainEvent extends DomainEvent {
   name = "ArticleCreated";
   version = 1;
 
-  readonly title: string;
-  readonly description: string;
+  readonly props: {
+    title: string;
+    description: string;
+  };
 
   constructor(props: DomainEventProps<ArticleProps>) {
     super(props);
-    this.title = props.title;
-    this.description = props.description;
+    this.props = {
+      title: props.title,
+      description: props.description,
+    };
   }
 }
 
@@ -22,8 +26,10 @@ export class ArticleTitleUpdatedDomainEvent extends DomainEvent {
   name = "ArticleTitleUpdated";
   version = 1;
 
-  readonly previousTitle: string;
-  readonly currentTitle: string;
+  readonly props: {
+    previousTitle: string;
+    currentTitle: string;
+  };
 
   constructor(
     props: DomainEventProps<{
@@ -32,8 +38,10 @@ export class ArticleTitleUpdatedDomainEvent extends DomainEvent {
     }>
   ) {
     super(props);
-    this.previousTitle = props.previousTitle;
-    this.currentTitle = props.currentTitle;
+    this.props = {
+      previousTitle: props.previousTitle,
+      currentTitle: props.currentTitle,
+    };
   }
 }
 
@@ -41,8 +49,10 @@ export class ArticleDescriptionUpdatedDomainEvent extends DomainEvent {
   name = "ArticleDescriptionUpdated";
   version = 1;
 
-  readonly previousDescription: string;
-  readonly currentDescription: string;
+  readonly props: {
+    previousDescription: string;
+    currentDescription: string;
+  };
 
   constructor(
     props: DomainEventProps<{
@@ -51,7 +61,9 @@ export class ArticleDescriptionUpdatedDomainEvent extends DomainEvent {
     }>
   ) {
     super(props);
-    this.previousDescription = props.previousDescription;
-    this.currentDescription = props.currentDescription;
+    this.props = {
+      previousDescription: props.previousDescription,
+      currentDescription: props.currentDescription,
+    };
   }
 }

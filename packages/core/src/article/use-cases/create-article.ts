@@ -18,7 +18,7 @@ export class CreateArticle {
       const article = Article.create(request);
 
       await this.articleRepository.insert(article);
-      await article.publishEvents(this.logger, this.eventEmitter);
+      await article.publishEvents(this.eventEmitter);
 
       return article;
     } catch (error) {

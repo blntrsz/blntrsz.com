@@ -1,7 +1,7 @@
-import { ActivityLog } from "../domain/activity-log";
-import { ActivityLogProps } from "../domain/activity-log.types";
-import { Logger } from "@blntrsz/core/common/ports/logger";
-import { ActivityLogRepository } from "../domain/repository/activity-log.repository";
+import type { Logger } from "@blntrsz/core/common/ports/logger";
+import { ActivityLog } from "@blntrsz/core/activity-log/domain/activity-log";
+import type { ActivityLogProps } from "@blntrsz/core/activity-log/domain/activity-log.types";
+import type { ActivityLogRepository } from "@blntrsz/core/activity-log/domain/repository/activity-log.repository";
 
 type Request = Pick<ActivityLogProps, "name" | "metaData">;
 
