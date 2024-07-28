@@ -19,10 +19,12 @@ export class CreateArticle {
   async execute(request: Request) {
     try {
       const promptResult = await this.llm.prompt(`
-        Create a summary from the following article: ${request.content}
+        Create a 1 sentence summary from the following article: ${request.content}
         Give it in the following format: <summary>summary</summary>
       `);
-      const description = promptResult.match("<summary>(.*)</summary>")?.[1];
+      const description = promptResult.match(
+        "<summary>((.|\n)*)</summary>"
+      )?.[1];
 
       if (!description) throw new InternalServerException();
 

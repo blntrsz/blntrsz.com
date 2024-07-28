@@ -20,5 +20,4 @@ export function handler(e: Event) {
     name: e["detail-type"],
     metaData: JSON.stringify(e.detail),
   });
-  console.log(JSON.stringify(e, null, 2));
 }

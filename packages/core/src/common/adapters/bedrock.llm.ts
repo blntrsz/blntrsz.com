@@ -34,12 +34,9 @@ export class BedrockLLM implements LLM {
       }),
     });
     const data = await client.send(params);
-    console.log(data);
     const jsonString = new TextDecoder().decode(data.body);
-    console.log(jsonString);
     const modelRes = JSON.parse(jsonString);
 
-    console.log(modelRes.content[0].text);
     return modelRes.content[0].text;
   }
 }

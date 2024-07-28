@@ -81,7 +81,7 @@ export default function Index() {
                 <CardHeader>
                   <CardTitle>{article.attributes.title}</CardTitle>
                   <CardDescription>
-                    {article.attributes.content}
+                    {article.attributes.description}
                   </CardDescription>
                 </CardHeader>
               </Card>

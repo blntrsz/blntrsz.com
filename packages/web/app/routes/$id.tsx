@@ -23,7 +23,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function ArticlePage() {
   const loaderData = useLoaderData<typeof loader>();
-  console.log(loaderData);
 
   useEffect(() => {
     hljs.highlightAll();

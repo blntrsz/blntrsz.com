@@ -20,6 +20,7 @@ import RichTextEditor from "~/components/text-editor";
 import { Button } from "~/components/ui/button";
 import { UpdateArticle } from "@blntrsz/core/article/use-cases/update-article";
 import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-emitter";
+import { BedrockLLM } from "@blntrsz/core/common/adapters/bedrock.llm";
 
 export const schema = z.object({
   title: z.string().min(5),
@@ -53,7 +54,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await new UpdateArticle(
     PinoLogger.instance,
     new TursoArticleRepository(),
-    new EventBridge()
+    new EventBridge(),
+    new BedrockLLM()
   ).execute({
     id: params.id!,
     ...submission.value,

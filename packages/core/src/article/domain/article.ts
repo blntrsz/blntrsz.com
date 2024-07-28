@@ -3,7 +3,7 @@ import { Aggregate } from "@blntrsz/core/lib/aggregate.base";
 import type { ArticleProps } from "./article.types";
 import {
   ArticleCreatedDomainEvent,
-  ArticleDescriptionUpdatedDomainEvent,
+  ArticleContentUpdatedDomainEvent,
   ArticleTitleUpdatedDomainEvent,
 } from "./article.domain-events";
 
@@ -42,16 +42,16 @@ export class Article extends Aggregate<ArticleProps> {
     );
   }
 
-  changeDescription(currentDescription: string) {
-    const previousDescription = this.props.description;
-    this.props.description = currentDescription;
+  changeContent(currentContent: string) {
+    const previousContent = this.props.content;
+    this.props.content = currentContent;
     this.updatedAt = new Date();
 
     this.addEvent(
-      new ArticleDescriptionUpdatedDomainEvent({
+      new ArticleContentUpdatedDomainEvent({
         aggregateId: this.id,
-        previousDescription,
-        currentDescription,
+        previousDescription: previousContent,
+        currentDescription: currentContent,
       })
     );
   }

@@ -76,8 +76,6 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
     values.push(id);
 
     const sql = `UPDATE ${this.tableName} SET ${sets} WHERE id = ?;`;
-    console.log(sql);
-    console.log(values);
 
     return useDatabaseClient(async (db) => {
       await db.execute({

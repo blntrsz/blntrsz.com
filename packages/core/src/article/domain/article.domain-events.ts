@@ -45,8 +45,8 @@ export class ArticleTitleUpdatedDomainEvent extends DomainEvent {
   }
 }
 
-export class ArticleDescriptionUpdatedDomainEvent extends DomainEvent {
-  name = "ArticleDescriptionUpdated";
+export class ArticleContentUpdatedDomainEvent extends DomainEvent {
+  name = "ArticleContentUpdated";
   version = 1;
 
   readonly props: {
