@@ -18,7 +18,7 @@ export default $config({
       target(event) {
         if (
           event.type === "branch" &&
-          event.branch === "prod" &&
+          event.branch === "main" &&
           event.action === "pushed"
         ) {
           return {
