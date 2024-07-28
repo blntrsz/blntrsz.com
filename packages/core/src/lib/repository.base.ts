@@ -67,6 +67,26 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
     });
   }
 
+  async update(entity: TAggregate) {
+    const { id, ...props } = entity.getProps();
+    const sets = Object.keys(props)
+      .map((p) => `${p} = ?`)
+      .join(", ");
+    const values = Object.values(props) as any[];
+    values.push(id);
+
+    const sql = `UPDATE ${this.tableName} SET ${sets} WHERE id = ?;`;
+    console.log(sql);
+    console.log(values);
+
+    return useDatabaseClient(async (db) => {
+      await db.execute({
+        sql,
+        args: values,
+      });
+    });
+  }
+
   async search(searchPhrase: string) {
     const result = await useDatabaseClient((db) => {
       return db.execute({

@@ -6,6 +6,7 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
+    "../core/**/*.ts",
     "./node_modules/@blntrsz/**/*.ts"
   ],
   "compilerOptions": {

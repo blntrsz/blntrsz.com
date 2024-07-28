@@ -3,7 +3,7 @@ import { FindOneArticle } from "@blntrsz/core/article/use-cases/find-one-article
 import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
 import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
@@ -12,10 +12,12 @@ import { Label } from "~/components/ui/label";
 import { InputConform } from "~/components/input-conform";
 import RichTextEditor from "~/components/text-editor";
 import { Button } from "~/components/ui/button";
+import { UpdateArticle } from "@blntrsz/core/article/use-cases/update-article";
+import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-emitter";
 
 export const schema = z.object({
   title: z.string().min(5),
-  description: z.string().min(20),
+  description: z.string().min(5),
 });
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -30,6 +32,28 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return json({
     article: articleMapper.toResponse(article),
   });
+}
+
+export async function action({ request, params }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const submission = parseWithZod(formData, {
+    schema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  await new UpdateArticle(
+    PinoLogger.instance,
+    new TursoArticleRepository(),
+    new EventBridge()
+  ).execute({
+    id: params.id!,
+    ...submission.value,
+  });
+
+  return redirect("/admin");
 }
 
 export default function UpdateArticlePage() {

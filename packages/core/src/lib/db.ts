@@ -1,4 +1,8 @@
-import { type Client, type Transaction, createClient } from "@libsql/client";
+import {
+  type Client,
+  type Transaction,
+  createClient,
+} from "@libsql/client/web";
 import { Context } from "./context";
 import { Resource } from "sst";
 
