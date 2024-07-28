@@ -7,4 +7,13 @@ export const web = new sst.aws.Remix("Web", {
   buildCommand: "pnpm build",
   path: "packages/web",
   link: [tursoToken, tursoDbUrl, bus, user, password],
+  domain:
+    $app.stage === "prod"
+      ? {
+          name: "blntrsz.com",
+          dns: sst.aws.dns({
+            zone: "Z06874309HH4OHAYVP8B",
+          }),
+        }
+      : undefined,
 });

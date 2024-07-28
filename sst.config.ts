@@ -4,7 +4,7 @@ export default $config({
   app(input) {
     return {
       name: "blntrsz-com",
-      removal: input?.stage === "production" ? "retain" : "remove",
+      removal: input?.stage === "prod" ? "retain" : "remove",
       home: "aws",
       providers: {
         aws: {
@@ -12,6 +12,22 @@ export default $config({
         },
       },
     };
+  },
+  console: {
+    autodeploy: {
+      target(event) {
+        if (
+          event.type === "branch" &&
+          event.branch === "main" &&
+          event.action === "pushed"
+        ) {
+          return {
+            stage: "prod",
+            runner: { engine: "codebuild", compute: "small" },
+          };
+        }
+      },
+    },
   },
   async run() {
     import("./packages/infra/src");

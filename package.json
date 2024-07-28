@@ -7,7 +7,8 @@
   "scripts": {
     "sst": "sst",
     "dev": "sst dev",
-    "migrate": "sst shell tsx migrate.ts"
+    "migrate": "sst shell tsx migrate.ts",
+    "deploy": "sst shell -- sst deploy --stage prod --mode=basic"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,6 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.142",
-    "@types/node": "^20.14.12"
+    "@types/node": "^22.0.0"
   }
 }
