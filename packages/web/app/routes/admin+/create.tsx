@@ -1,6 +1,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import { useForm } from "@conform-to/react";
-import { Form, redirect, useActionData } from "@remix-run/react";
+import { Form, redirect, useActionData, useNavigation } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Field, FieldError } from "~/components/field";
 import { InputConform } from "~/components/input-conform";
@@ -12,10 +12,11 @@ import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/tur
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
 import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-emitter";
 import RichTextEditor from "~/components/text-editor";
+import { BedrockLLM } from "@blntrsz/core/common/adapters/bedrock.llm";
 
 export const schema = z.object({
   title: z.string().min(5),
-  description: z.string().min(20),
+  content: z.string().min(20),
 });
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -31,13 +32,15 @@ export async function action({ request }: ActionFunctionArgs) {
   await new CreateArticle(
     PinoLogger.instance,
     new TursoArticleRepository(),
-    new EventBridge()
+    new EventBridge(),
+    new BedrockLLM()
   ).execute(submission.value);
 
   return redirect("/admin");
 }
 
 export default function CreateArticlePage() {
+  const navigation = useNavigation();
   const lastResult = useActionData<typeof action>();
   const [form, fields] = useForm({
     // Sync the result of last submission
@@ -71,13 +74,15 @@ export default function CreateArticlePage() {
         {fields.title.errors && <FieldError>{fields.title.errors}</FieldError>}
       </Field>
       <Field>
-        <Label htmlFor={fields.description.id}>Name</Label>
-        <RichTextEditor meta={fields.description} type="hidden" />
-        {fields.description.errors && (
-          <FieldError>{fields.description.errors}</FieldError>
+        <Label htmlFor={fields.content.id}>Name</Label>
+        <RichTextEditor meta={fields.content} type="hidden" />
+        {fields.content.errors && (
+          <FieldError>{fields.content.errors}</FieldError>
         )}
       </Field>
-      <Button type="submit">Create</Button>
+      <Button disabled={navigation.state === "submitting"} type="submit">
+        Create
+      </Button>
     </Form>
   );
 }

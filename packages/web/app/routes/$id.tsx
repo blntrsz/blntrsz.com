@@ -38,7 +38,7 @@ export default function ArticlePage() {
       <h1>{loaderData.article.attributes.title}</h1>
       <div
         dangerouslySetInnerHTML={{
-          __html: loaderData.article.attributes.description,
+          __html: loaderData.article.attributes.content,
         }}
       />
     </article>

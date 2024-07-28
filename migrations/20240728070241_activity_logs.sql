@@ -2,11 +2,11 @@
 -- +goose StatementBegin
 CREATE TABLE activity_logs (
     row_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id TEXT UNIQUE,
+    id TEXT UNIQUE NOT NULL,
     updatedAt DATE,
     createdAt DATE,
-    name TEXT,
-    metaData JSON
+    name TEXT NOT NULL,
+    metaData JSON NOT NULL
 );
 
 CREATE VIRTUAL TABLE activity_logs_fts USING fts5(

@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-bedrock": "^3.620.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.620.0",
     "@aws-sdk/client-eventbridge": "^3.620.0",
     "@conform-to/react": "^1.1.5",
     "@conform-to/zod": "^1.1.5",

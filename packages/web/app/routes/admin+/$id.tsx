@@ -1,4 +1,10 @@
-import { Form, json, redirect, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  json,
+  redirect,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { FindOneArticle } from "@blntrsz/core/article/use-cases/find-one-article";
 import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
@@ -17,7 +23,7 @@ import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-em
 
 export const schema = z.object({
   title: z.string().min(5),
-  description: z.string().min(5),
+  content: z.string().min(5),
 });
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -57,6 +63,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function UpdateArticlePage() {
+  const navigation = useNavigation();
   const loaderData = useLoaderData<typeof loader>();
   const [form, fields] = useForm({
     // Reuse the validation logic on the client
@@ -88,17 +95,19 @@ export default function UpdateArticlePage() {
         {fields.title.errors && <FieldError>{fields.title.errors}</FieldError>}
       </Field>
       <Field>
-        <Label htmlFor={fields.description.id}>Name</Label>
+        <Label htmlFor={fields.content.id}>Name</Label>
         <RichTextEditor
-          defaultValue={loaderData.article.attributes.description}
-          meta={fields.description}
+          defaultValue={loaderData.article.attributes.content}
+          meta={fields.content}
           type="hidden"
         />
-        {fields.description.errors && (
-          <FieldError>{fields.description.errors}</FieldError>
+        {fields.content.errors && (
+          <FieldError>{fields.content.errors}</FieldError>
         )}
       </Field>
-      <Button type="submit">Update</Button>
+      <Button disabled={navigation.state === "submitting"} type="submit">
+        Update
+      </Button>
     </Form>
   );
 }

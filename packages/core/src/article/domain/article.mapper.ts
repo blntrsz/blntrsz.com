@@ -12,6 +12,7 @@ export const articleMapper = {
       attributes: {
         title: props.title,
         description: props.description,
+        content: props.content,
         createdAt: props.createdAt,
         updatedAt: props.updatedAt,
       },

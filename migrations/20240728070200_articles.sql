@@ -2,11 +2,12 @@
 -- +goose StatementBegin
 CREATE TABLE articles (
     row_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id TEXT UNIQUE,
+    id TEXT UNIQUE NOT NULL,
     updatedAt DATE,
     createdAt DATE,
-    title TEXT,
-    description TEXT
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    description TEXT NOT NULL
 );
 CREATE VIRTUAL TABLE articles_fts USING fts5(
     id,

@@ -7,6 +7,14 @@ export const web = new sst.aws.Remix("Web", {
   buildCommand: "pnpm build",
   path: "packages/web",
   link: [tursoToken, tursoDbUrl, bus, user, password],
+  permissions: [
+    {
+      actions: ["bedrock:InvokeModel"],
+      resources: [
+        "arn:aws:bedrock:eu-central-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
+      ],
+    },
+  ],
   domain:
     $app.stage === "prod"
       ? {
