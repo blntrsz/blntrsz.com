@@ -1,4 +1,5 @@
 import {
+  json,
   Links,
   Meta,
   Outlet,
@@ -7,6 +8,31 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import { BaseLayout } from "./components/layout";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { SearchArticles } from "@blntrsz/core/article/use-cases/search-articles";
+import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+
+  if (!q)
+    return json({
+      articles: [],
+    });
+
+  const useCase = new SearchArticles(
+    PinoLogger.instance,
+    new TursoArticleRepository()
+  );
+  const articles = await useCase.execute(q);
+
+  return json({
+    articles: articles.map((article) => articleMapper.toResponse(article)),
+  });
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

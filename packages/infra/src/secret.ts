@@ -3,3 +3,5 @@ export const tursoDbUrl = new sst.Secret(
   "TursoDbUrl",
   "libsql://blntrsz-blntrsz.turso.io"
 );
+export const user = new sst.Secret("User");
+export const password = new sst.Secret("Password");

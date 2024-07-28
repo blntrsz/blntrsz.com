@@ -1,32 +1,30 @@
 import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react";
-
-import {
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "~/components/ui/command";
 import { useEffect, useState } from "react";
+import {
+  Link,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
+import { loader } from "~/root";
 
 export function BaseLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <header className="h-16 border-b-gray-700 border-2 container flex justify-between items-center">
-        <h2>Bálint Orosz</h2>
-        <GlobalSearch />
+      <header className="h-16 border-b-zinc-800 border-b-[1px] flex justify-between">
+        <div className="container flex justify-between items-center">
+          <Link to="/">
+            <h2>Bálint Orosz</h2>
+          </Link>
+          <GlobalSearch />
+        </div>
       </header>
-      <main className="container">{children}</main>
+      <main className="container py-4">{children}</main>
       <footer className="container"></footer>
     </>
   );
@@ -34,6 +32,9 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
 
 export function GlobalSearch() {
   const [open, setOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const loaderData = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -48,7 +49,7 @@ export function GlobalSearch() {
   }, []);
 
   return (
-    <>
+    <div>
       <div className="w-full flex-1 md:w-auto md:flex-none">
         <button
           onClick={() => setOpen(true)}
@@ -61,44 +62,48 @@ export function GlobalSearch() {
           </kbd>
         </button>
       </div>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+      <CommandDialog
+        open={open}
+        onOpenChange={(state) => {
+          setOpen(state);
+        }}
+      >
+        <CommandInput
+          value={searchParams.get("q") ?? ""}
+          onValueChange={(value) => {
+            setSearchParams((sp) => {
+              sp.set("q", value);
+              return sp;
+            });
+          }}
+          placeholder="Type a command or search..."
+        />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
+          {!!loaderData?.articles?.length && (
+            <CommandEmpty>
+              <ul className="flex flex-col items-start w-full">
+                {loaderData.articles.map((article) => (
+                  <Link
+                    key={article.id}
+                    className="hover:bg-zinc-800 w-full flex pl-10"
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter") return;
+                      navigate(`/${article.id}`);
+                      setOpen(false);
+                    }}
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    to={`/${article.id}`}
+                  >
+                    <li className="">{article.attributes.title}</li>
+                  </Link>
+                ))}
+              </ul>
+            </CommandEmpty>
+          )}
         </CommandList>
       </CommandDialog>
-    </>
+    </div>
   );
 }

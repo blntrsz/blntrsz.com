@@ -11,6 +11,7 @@ import { CreateArticle } from "@blntrsz/core/article/use-cases/create-article";
 import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
 import { EventBridge } from "@blntrsz/core/common/adapters/event-bridge.event-emitter";
+import RichTextEditor from "~/components/text-editor";
 
 export const schema = z.object({
   title: z.string().min(5),
@@ -71,11 +72,7 @@ export default function CreateArticlePage() {
       </Field>
       <Field>
         <Label htmlFor={fields.description.id}>Name</Label>
-        <InputConform
-          placeholder="Add description here..."
-          meta={fields.description}
-          type="text"
-        />
+        <RichTextEditor meta={fields.description} type="hidden" />
         {fields.description.errors && (
           <FieldError>{fields.description.errors}</FieldError>
         )}

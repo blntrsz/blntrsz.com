@@ -1,9 +1,22 @@
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { Form, json, redirect, useLoaderData } from "@remix-run/react";
 import { FindOneArticle } from "@blntrsz/core/article/use-cases/find-one-article";
 import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
 import { TursoArticleRepository } from "@blntrsz/core/article/infrastructure/turso.article.repository";
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { z } from "zod";
+import { Field, FieldError } from "~/components/field";
+import { Label } from "~/components/ui/label";
+import { InputConform } from "~/components/input-conform";
+import RichTextEditor from "~/components/text-editor";
+import { Button } from "~/components/ui/button";
+
+export const schema = z.object({
+  title: z.string().min(5),
+  description: z.string().min(20),
+});
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const useCase = new FindOneArticle(
@@ -19,12 +32,49 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 }
 
-export default function Admin() {
+export default function UpdateArticlePage() {
   const loaderData = useLoaderData<typeof loader>();
+  const [form, fields] = useForm({
+    // Reuse the validation logic on the client
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema });
+    },
 
-  if ("message" in loaderData) {
-    return <>Error </>;
-  }
+    // Validate the form on blur event triggered
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
 
-  return <div>{JSON.stringify(loaderData)}</div>;
+  return (
+    <Form
+      className="grid gap-4"
+      method="post"
+      id={form.id}
+      onSubmit={form.onSubmit}
+      noValidate
+    >
+      <Field>
+        <Label htmlFor={fields.title.id}>Name</Label>
+        <InputConform
+          defaultValue={loaderData.article.attributes.title}
+          placeholder="Add title here..."
+          meta={fields.title}
+          type="text"
+        />
+        {fields.title.errors && <FieldError>{fields.title.errors}</FieldError>}
+      </Field>
+      <Field>
+        <Label htmlFor={fields.description.id}>Name</Label>
+        <RichTextEditor
+          defaultValue={loaderData.article.attributes.description}
+          meta={fields.description}
+          type="hidden"
+        />
+        {fields.description.errors && (
+          <FieldError>{fields.description.errors}</FieldError>
+        )}
+      </Field>
+      <Button type="submit">Update</Button>
+    </Form>
+  );
 }

@@ -66,4 +66,22 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
       props,
     });
   }
+
+  async search(searchPhrase: string) {
+    const result = await useDatabaseClient((db) => {
+      return db.execute({
+        sql: `SELECT * FROM ${this.tableName}_fts(?);`,
+        args: [searchPhrase],
+      });
+    });
+
+    return result.rows.map(({ id, updatedAt, createdAt, ...props }) =>
+      this.toDomain({
+        id,
+        updatedAt,
+        createdAt,
+        props,
+      })
+    );
+  }
 }

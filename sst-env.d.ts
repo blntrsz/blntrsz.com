@@ -8,11 +8,19 @@ declare module "sst" {
       name: string
       type: "sst.aws.Bus"
     }
+    Password: {
+      type: "sst.sst.Secret"
+      value: string
+    }
     TursoDbUrl: {
       type: "sst.sst.Secret"
       value: string
     }
     TursoToken: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    User: {
       type: "sst.sst.Secret"
       value: string
     }
