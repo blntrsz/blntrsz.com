@@ -29,9 +29,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
   const articles = await useCase.execute(q);
 
-  return json({
-    articles: articles.map((article) => articleMapper.toResponse(article)),
-  });
+  return json(
+    {
+      articles: articles.map((article) => articleMapper.toResponse(article)),
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+      },
+    }
+  );
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
