@@ -54,7 +54,7 @@ export default function Index() {
             specialize in serverless technologies, AWS, and Infrastructure as
             Code. Follow my blog for insights from my career.
           </p>
-          <div className="space-x-4">
+          <div className="flex flex-col gap-2 items-center md:flex-row">
             <a
               className="inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md"
               href="#latest-posts"
@@ -64,7 +64,7 @@ export default function Index() {
             <a
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-input hover:bg-accent hover:text-accent-foreground h-11 px-8 rounded-md"
+              className="rounded-md border-[1px] border-zinc-800 px-6 py-2 ml-0"
               href="https://github.com/blntrsz"
             >
               GitHub
@@ -76,7 +76,7 @@ export default function Index() {
         <h1 className="text-2xl">Latest Posts</h1>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
           {loaderData.articles.map((article) => (
-            <Link key={article.id} to={`/${article.id}`}>
+            <Link className="flex" key={article.id} to={`/${article.id}`}>
               <Card className="hover:bg-zinc-900">
                 <CardHeader>
                   <CardTitle>{article.attributes.title}</CardTitle>

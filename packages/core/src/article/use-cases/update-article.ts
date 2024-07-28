@@ -35,7 +35,9 @@ export class UpdateArticle {
         article.changeContent(request.content);
 
         const promptResult = await this.llm.prompt(`
-        Create a 1 sentence summary from the following article: ${request.content}
+        Create a 1 sentence long description from the following article: 
+        ${request.title}
+        ${request.content}
         Give it in the following format: <summary>summary</summary>
       `);
         const newDescription = promptResult.match(
