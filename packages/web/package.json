@@ -15,7 +15,7 @@
     "@conform-to/react": "^1.1.5",
     "@conform-to/zod": "^1.1.5",
     "@hookform/resolvers": "^3.9.0",
-    "@libsql/client": "^0.7.0",
+    "@libsql/client": "^0.3.2",
     "@libsql/linux-x64-gnu": "0.4.0-pre.10",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",

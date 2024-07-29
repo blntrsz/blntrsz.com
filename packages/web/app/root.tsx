@@ -19,9 +19,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const q = url.searchParams.get("q");
 
   if (!q)
-    return json({
-      articles: [],
-    });
+    return json(
+      {
+        articles: [],
+      },
+      {
+        headers: {
+          "Cache-Control":
+            "public, max-age=0, s-maxage=60, stale-while-revalidate=3600",
+        },
+      }
+    );
 
   const useCase = new SearchArticles(
     PinoLogger.instance,
@@ -35,7 +43,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     {
       headers: {
-        "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+        "Cache-Control":
+          "public, max-age=0, s-maxage=60, stale-while-revalidate=3600",
       },
     }
   );

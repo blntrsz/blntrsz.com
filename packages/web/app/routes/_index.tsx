@@ -14,8 +14,12 @@ import {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Bálint Orosz's blogs" },
+    {
+      name: "description",
+      content:
+        "Welcome to my blog! I'm Bálint Orosz, a Staff Software Engineer at Diligent. I specialize in serverless technologies, AWS, and Infrastructure as Code. Follow my blog for insights from my career.",
+    },
   ];
 };
 

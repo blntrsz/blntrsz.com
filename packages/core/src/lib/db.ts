@@ -2,7 +2,7 @@ import {
   type Client,
   type Transaction,
   createClient,
-} from "@libsql/client/web";
+} from "@libsql/client/http";
 import { Context } from "./context";
 import { Resource } from "sst";
 
@@ -17,12 +17,13 @@ export async function useDatabaseClient<T>(
     const { client } = DatabaseClientContext.use();
     return await callback(client);
   } catch (error) {
-    return await callback(
-      createClient({
-        url: Resource.TursoDbUrl.value,
-        authToken: Resource.TursoToken.value,
-      })
-    );
+    const client = createClient({
+      url: Resource.TursoDbUrl.value,
+      authToken: Resource.TursoToken.value,
+    });
+    const result = await callback(client);
+    client.close();
+    return result;
   }
 }
 
@@ -33,10 +34,11 @@ export async function createTransaction<T>(
     const { client } = DatabaseClientContext.use();
     return callback(client);
   } catch (error) {
-    const transaction = await createClient({
+    const client = createClient({
       url: Resource.TursoDbUrl.value,
       authToken: Resource.TursoToken.value,
-    }).transaction();
+    });
+    const transaction = await client.transaction();
     try {
       const result = await callback(transaction);
       await transaction.commit();
@@ -45,6 +47,8 @@ export async function createTransaction<T>(
     } catch (error) {
       await transaction.rollback();
       throw error;
+    } finally {
+      client.close();
     }
   }
 }
