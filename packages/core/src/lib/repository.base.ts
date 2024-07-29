@@ -1,9 +1,18 @@
-import { useDatabaseClient } from "./db";
 import { Aggregate } from "./aggregate.base";
+import { createClient, type Client } from "@libsql/client/http";
+import { Resource } from "sst";
 
 export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
   abstract tableName: string;
   abstract toDomain(props: any): TAggregate;
+  client: Client;
+
+  constructor() {
+    this.client = createClient({
+      url: Resource.TursoDbUrl.value,
+      authToken: Resource.TursoToken.value,
+    });
+  }
 
   async insert(entity: TAggregate): Promise<void> {
     const props = entity.getProps();
@@ -11,29 +20,23 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
     const values = Object.values(props);
     const prepared = values.map(() => "?").join(", ");
 
-    return useDatabaseClient(async (db) => {
-      await db.execute({
-        sql: `INSERT INTO ${this.tableName} (${keys}) VALUES (${prepared});`,
-        args: values,
-      });
+    await this.client.execute({
+      sql: `INSERT INTO ${this.tableName} (${keys}) VALUES (${prepared});`,
+      args: values,
     });
   }
 
   async delete(entity: TAggregate): Promise<void> {
-    return useDatabaseClient(async (db) => {
-      await db.execute({
-        sql: `DELETE FROM ${this.tableName} WHERE id = ?;`,
-        args: [entity.id],
-      });
+    await this.client.execute({
+      sql: `DELETE FROM ${this.tableName} WHERE id = ?;`,
+      args: [entity.id],
     });
   }
 
   async findAll(): Promise<TAggregate[]> {
-    const result = await useDatabaseClient((db) => {
-      return db.execute({
-        sql: `SELECT * FROM ${this.tableName};`,
-        args: [],
-      });
+    const result = await this.client.execute({
+      sql: `SELECT * FROM ${this.tableName};`,
+      args: [],
     });
 
     return result.rows.map(({ id, updatedAt, createdAt, ...props }) =>
@@ -47,12 +50,11 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
   }
 
   async findOne(aggregateId: string): Promise<TAggregate | null> {
-    const result = await useDatabaseClient((db) => {
-      return db.execute({
-        sql: `SELECT * FROM ${this.tableName} where id = ?;`,
-        args: [aggregateId],
-      });
+    const result = await this.client.execute({
+      sql: `SELECT * FROM ${this.tableName} where id = ?;`,
+      args: [aggregateId],
     });
+
     const first = result.rows[0];
 
     if (!first) return null;
@@ -77,21 +79,19 @@ export abstract class BaseRepository<TAggregate extends Aggregate<unknown>> {
 
     const sql = `UPDATE ${this.tableName} SET ${sets} WHERE id = ?;`;
 
-    return useDatabaseClient(async (db) => {
-      await db.execute({
-        sql,
-        args: values,
-      });
+    await this.client.execute({
+      sql,
+      args: values,
     });
   }
 
   async search(searchPhrase: string) {
-    const result = await useDatabaseClient((db) => {
-      return db.execute({
-        sql: `SELECT * FROM ${this.tableName}_fts(?);`,
-        args: [searchPhrase],
-      });
+    const result = await this.client.execute({
+      sql: `SELECT * FROM ${this.tableName}_fts(?);`,
+      args: [searchPhrase],
     });
+
+    if (!result) return [];
 
     return result.rows.map(({ id, updatedAt, createdAt, ...props }) =>
       this.toDomain({
