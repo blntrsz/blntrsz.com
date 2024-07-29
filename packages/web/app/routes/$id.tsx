@@ -1,4 +1,4 @@
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { json, MetaFunction, redirect, useLoaderData } from "@remix-run/react";
 import { FindOneArticle } from "@blntrsz/core/article/use-cases/find-one-article";
 import { articleMapper } from "@blntrsz/core/article/domain/article.mapper";
 import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
@@ -20,6 +20,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
     article: articleMapper.toResponse(article),
   });
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const title = data?.article.attributes.title;
+  const description = data?.article.attributes.description;
+  return [
+    { title },
+    {
+      name: "description",
+      content: description,
+    },
+  ];
+};
 
 export default function ArticlePage() {
   const loaderData = useLoaderData<typeof loader>();
