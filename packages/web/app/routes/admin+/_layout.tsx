@@ -1,39 +1,66 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { json, Link, Outlet, useLoaderData } from "@remix-run/react";
+import { PinoLogger } from "@blntrsz/core/common/adapters/pino.logger";
+import { FindOneSession } from "@blntrsz/core/session/use-cases/find-one-session";
+import { CreateSession } from "@blntrsz/core/session/use-cases/create-session";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { Form, json, Outlet, useLoaderData } from "@remix-run/react";
+import { TursoSesionRepository } from "@blntrsz/core/session/infrastructure/turso.session.repository";
+import { sessionCookie } from "./session.server";
+import { Input } from "~/components/ui/input";
 import { Resource } from "sst";
 import { Button } from "~/components/ui/button";
+import { Label } from "@radix-ui/react-label";
+import { Field } from "~/components/field";
 
-function isAuthorized(request: Request) {
-  const header = request.headers.get("Authorization");
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await sessionCookie.getSession(request.headers.get("Cookie"));
+  const id = session.get("id");
 
-  if (!header) return false;
+  if (!id) return json({ authorized: false });
 
-  const base64 = header.replace("Basic ", "");
-  const [username, password] = Buffer.from(base64, "base64")
-    .toString()
-    .split(":");
+  const currentSession = await new FindOneSession(
+    PinoLogger.instance,
+    new TursoSesionRepository()
+  ).execute({ id });
+  if (!currentSession) return json({ authorized: false });
 
-  return (
-    username === Resource.User.value && password === Resource.Password.value
+  return json(
+    { authorized: true },
+    {
+      headers: {
+        "Set-Cookie": await sessionCookie.commitSession(session),
+      },
+    }
   );
 }
 
-export const headers = () => ({
-  "WWW-Authenticate": "Basic",
-});
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await sessionCookie.getSession(request.headers.get("Cookie"));
+  const formData = await request.formData();
+  const email = formData.get("name");
+  const password = formData.get("password");
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  if (!isAuthorized(request)) {
-    return json({ authorized: false }, { status: 401 });
+  if (Resource.User.value === email && Resource.Password.value === password) {
+    const newSession = await new CreateSession(
+      PinoLogger.instance,
+      new TursoSesionRepository()
+    ).execute();
+
+    session.set("id", newSession.id);
+
+    return json(
+      { authorized: true },
+      {
+        headers: {
+          "Set-Cookie": await sessionCookie.commitSession(session),
+        },
+      }
+    );
   }
-
-  // Load data for password-protected page here.
 
   return json({
     authorized: true,
-    // Include extra data for password-protected page here.
   });
-};
+}
 
 export default function Layout() {
   const loaderData = useLoaderData<typeof loader>();
@@ -43,11 +70,18 @@ export default function Layout() {
   }
 
   return (
-    <>
-      <h1>Forbidden</h1>
-      <Button asChild>
-        <Link to="/">To Home</Link>
+    <Form className="grid gap-4" method="post">
+      <Field>
+        <Label>Name</Label>
+        <Input name="name" type="text" />
+      </Field>
+      <Field>
+        <Label>Password</Label>
+        <Input name="password" type="password" />
+      </Field>
+      <Button className="mt-4" type="submit">
+        Login
       </Button>
-    </>
+    </Form>
   );
 }
