@@ -19,17 +19,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const q = url.searchParams.get("q");
 
   if (!q)
-    return json(
-      {
-        articles: [],
-      },
-      {
-        headers: {
-          "Cache-Control":
-            "public, max-age=0, s-maxage=60, stale-while-revalidate=3600",
-        },
-      }
-    );
+    return json({
+      articles: [],
+    });
 
   const useCase = new SearchArticles(
     PinoLogger.instance,
@@ -37,17 +29,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
   const articles = await useCase.execute(q);
 
-  return json(
-    {
-      articles: articles.map((article) => articleMapper.toResponse(article)),
-    },
-    {
-      headers: {
-        "Cache-Control":
-          "public, max-age=0, s-maxage=60, stale-while-revalidate=3600",
-      },
-    }
-  );
+  return json({
+    articles: articles.map((article) => articleMapper.toResponse(article)),
+  });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

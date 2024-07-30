@@ -7,6 +7,14 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { useEffect } from "react";
 import hljs from "highlight.js";
 
+export function headers() {
+  return {
+    "Cache-Control":
+      "public, max-age=3600, s-maxage=3600, stale-while-revalidate=600",
+    Vary: "Cookie",
+  };
+}
+
 export async function loader({ params }: LoaderFunctionArgs) {
   const useCase = new FindOneArticle(
     PinoLogger.instance,

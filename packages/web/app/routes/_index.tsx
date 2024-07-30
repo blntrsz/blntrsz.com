@@ -23,6 +23,14 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export function headers() {
+  return {
+    "Cache-Control":
+      "public, max-age=3600, s-maxage=3600, stale-while-revalidate=600",
+    Vary: "Cookie",
+  };
+}
+
 export async function loader() {
   const useCase = new ListArticles(
     PinoLogger.instance,
