@@ -20,7 +20,7 @@ export const web = new sst.aws.Remix("Web", {
       ? {
           name: "blntrsz.com",
           dns: sst.aws.dns({
-            zone: "Z06874309HH4OHAYVP8B",
+            zone: "Z098600234J46TZ3DMXE0",
           }),
         }
       : undefined,
